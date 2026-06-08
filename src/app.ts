@@ -10,6 +10,7 @@ import { exercisesRoutes } from "./modules/exercises/exercises.routes";
 import { workoutsRoutes } from "./modules/workouts/workouts.routes";
 import { sessionsRoutes } from "./modules/sessions/sessions.routes";
 import { progressRoutes } from "./modules/progress/progress.routes";
+import { aiRoutes } from "./modules/ai/ai.routes";
 
 export const buildApp = async () => {
   const app = Fastify({
@@ -27,6 +28,7 @@ export const buildApp = async () => {
   await app.register(workoutsRoutes);
   await app.register(sessionsRoutes);
   await app.register(progressRoutes);
+  await app.register(aiRoutes);
 
   app.get("/health", async () => ({ status: "ok" }));
 

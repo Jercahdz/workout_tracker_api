@@ -35,13 +35,18 @@ enum MuscleGroup {
   FULL_BODY
 }
 
+enum UnitSystem {
+  METRIC
+  IMPERIAL
+}
+
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
+  id           String     @id @default(uuid())
+  email        String     @unique
   password     String
-  role         Role      @default(USER)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  role         Role       @default(USER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   profile      Profile?
   workouts     Workout[]
   sessions     Session[]
@@ -51,28 +56,29 @@ model User {
 }
 
 model Profile {
-  id        String       @id @default(uuid())
-  userId    String       @unique
-  age       Int
-  weight    Float
-  height    Float
-  goal      FitnessGoal
-  level     FitnessLevel
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String       @id @default(uuid())
+  userId     String       @unique
+  age        Int
+  weight     Float
+  height     Float
+  goal       FitnessGoal
+  level      FitnessLevel
+  unitSystem UnitSystem   @default(METRIC)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }
 
 model Exercise {
-  id               String             @id @default(uuid())
-  name             String             @unique
+  id               String            @id @default(uuid())
+  name             String            @unique
   muscleGroup      MuscleGroup
   equipment        String?
-  description      String?            @db.Text
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  description      String?           @db.Text
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
   workoutExercises WorkoutExercise[]
 
   @@map("exercises")
@@ -107,24 +113,24 @@ model WorkoutExercise {
 }
 
 model Session {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   userId      String
   workoutId   String
-  completedAt DateTime  @default(now())
-  notes       String?   @db.Text
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workout     Workout   @relation(fields: [workoutId], references: [id])
+  completedAt DateTime @default(now())
+  notes       String?  @db.Text
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout     Workout  @relation(fields: [workoutId], references: [id])
 
   @@map("sessions")
 }
 
 model Progress {
-  id        String   @id @default(uuid())
-  userId    String
-  weight    Float
-  notes     String?  @db.Text
-  date      DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String   @id @default(uuid())
+  userId String
+  weight Float
+  notes  String?  @db.Text
+  date   DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("progress_logs")
 }

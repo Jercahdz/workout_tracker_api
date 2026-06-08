@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `profiles` ADD COLUMN `unitSystem` ENUM('METRIC', 'IMPERIAL') NOT NULL DEFAULT 'METRIC';
