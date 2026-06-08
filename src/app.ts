@@ -8,6 +8,7 @@ import { usersRoutes } from "./modules/users/users.routes";
 import { profileRoutes } from "./modules/profile/profile.routes";
 import { exercisesRoutes } from "./modules/exercises/exercises.routes";
 import { workoutsRoutes } from "./modules/workouts/workouts.routes";
+import { sessionsRoutes } from "./modules/sessions/sessions.routes";
 
 export const buildApp = async () => {
   const app = Fastify({
@@ -23,6 +24,7 @@ export const buildApp = async () => {
   await app.register(profileRoutes);
   await app.register(exercisesRoutes);
   await app.register(workoutsRoutes);
+  await app.register(sessionsRoutes);
 
   app.get("/health", async () => ({ status: "ok" }));
 
