@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+          PORT: 3000
+          NODE_ENV: test
+          JWT_SECRET: test_secret
+          JWT_REFRESH_SECRET: test_refresh_secret
+          JWT_EXPIRES_IN: 15m
+          JWT_REFRESH_EXPIRES_IN: 7d
+          AI_PROVIDER: ollama
+          OLLAMA_BASE_URL: http://localhost:11434
+          OLLAMA_MODEL: llama3.2
+          DATABASE_URL: mysql://user:password@localhost:3306/workout_tracker
