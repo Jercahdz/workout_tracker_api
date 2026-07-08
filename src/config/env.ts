@@ -12,4 +12,6 @@ export const env = {
   aiProvider: process.env.AI_PROVIDER ?? "ollama",
   ollamaBaseUrl: process.env.OLLAMA_BASE_URL ?? "http://localhost:11434",
   ollamaModel: process.env.OLLAMA_MODEL ?? "llama3.2",
+  groqApiKey: process.env.GROQ_API_KEY ?? "",
+  groqModel: process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
 };

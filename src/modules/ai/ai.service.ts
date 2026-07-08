@@ -1,8 +1,13 @@
 import { prisma } from "../../shared/utils/prisma";
 import { OllamaProvider } from "./providers/ollama.provider";
+import { GroqProvider } from "./providers/groq.provider";
 import type { AIProvider } from "./providers/ai-provider.interface";
+import { env } from "../../config/env";
 
 const getProvider = (): AIProvider => {
+  if (env.aiProvider === "groq") {
+    return new GroqProvider();
+  }
   return new OllamaProvider();
 };
 
