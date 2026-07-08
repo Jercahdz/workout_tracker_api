@@ -2,6 +2,8 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
+import swagger from "@fastify/swagger";
+import swaggerUi from "@fastify/swagger-ui";
 import { env } from "./config/env";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { usersRoutes } from "./modules/users/users.routes";
@@ -17,8 +19,35 @@ export const buildApp = async () => {
     logger: env.nodeEnv === "development",
   });
 
+  await app.register(swagger, {
+    openapi: {
+      info: {
+        title: "Workout Tracker API",
+        description: "REST API for workout management with AI-powered routine generation",
+        version: "1.0.0",
+      },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: "http",
+            scheme: "bearer",
+            bearerFormat: "JWT",
+          },
+        },
+      },
+    },
+  });
+
+  await app.register(swaggerUi, {
+    routePrefix: "/docs",
+    uiConfig: {
+      docExpansion: "list",
+      deepLinking: true,
+    },
+  });
+
   await app.register(cors, { origin: true });
-  await app.register(helmet);
+  await app.register(helmet, { contentSecurityPolicy: false });
   await app.register(rateLimit, { max: 100, timeWindow: "1 minute" });
 
   await app.register(authRoutes);
