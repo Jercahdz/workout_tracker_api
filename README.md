@@ -59,7 +59,7 @@ This is a personal portfolio project built to practice production-grade backend 
 | ORM | Prisma |
 | Authentication | JWT (access + refresh tokens), bcrypt |
 | Validation | Zod |
-| AI Provider | Ollama (llama3.2), interchangeable via provider pattern |
+| AI Provider | Ollama (llama3.2) local / Groq (llama-3.3-70b) cloud, interchangeable via provider pattern |
 | Testing | Vitest |
 | CI/CD | GitHub Actions |
 | Containers | Docker, Docker Compose |
@@ -116,6 +116,8 @@ docker-compose.yml
 ---
 
 ## Getting Started
+
+> **Live API:** https://workouttrackerapi-production.up.railway.app/docs
 
 ### Prerequisites
 
@@ -179,9 +181,11 @@ The server will be available at `http://localhost:3000`.
 | `JWT_REFRESH_SECRET` | Secret for refresh tokens |
 | `JWT_EXPIRES_IN` | Access token expiration |
 | `JWT_REFRESH_EXPIRES_IN` | Refresh token expiration |
-| `AI_PROVIDER` | AI provider identifier (`ollama`) |
+| `AI_PROVIDER` | AI provider identifier (`ollama` or `groq`) |
 | `OLLAMA_BASE_URL` | Ollama local server URL |
 | `OLLAMA_MODEL` | Ollama model name |
+| `GROQ_API_KEY` | Groq API key |
+| `GROQ_MODEL` | Groq model name |
 
 See `.env.example` for a complete template.
 
@@ -273,6 +277,8 @@ Every push and pull request to `main` triggers a GitHub Actions pipeline that:
 1. Installs dependencies
 2. Runs the full unit test suite
 
+Merges to `main` are automatically deployed to Railway.
+
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ---
@@ -281,9 +287,9 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 - [ ] Full imperial unit system support (lb / in) across all weight and height fields
 - [ ] Refresh token blacklist for real logout invalidation
-- [ ] Cloud deployment pipeline
-- [ ] Additional AI provider implementations (Gemini, Groq) using the existing `AIProvider` interface
 - [ ] Pagination and filtering for list endpoints
+- [x] Cloud deployment on Railway
+- [x] Groq cloud provider implementation
 
 ---
 
