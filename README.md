@@ -12,6 +12,7 @@ This project simulates a real production backend environment, integrating clean 
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-tested-6E9F18?logo=vitest&logoColor=white)
 ![CI](https://github.com/Jercahdz/workout_tracker_api/actions/workflows/ci.yml/badge.svg)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-API%20Docs-brightgreen)](https://workouttrackerapi-production.up.railway.app/docs)
 
 ---
 
