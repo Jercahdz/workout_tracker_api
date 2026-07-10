@@ -287,7 +287,7 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 - [ ] Full imperial unit system support (lb / in) across all weight and height fields
 - [ ] Refresh token blacklist for real logout invalidation
-- [ ] Pagination and filtering for list endpoints
+- [x] Pagination and filtering for list endpoints
 - [x] Cloud deployment on Railway
 - [x] Groq cloud provider implementation
 
