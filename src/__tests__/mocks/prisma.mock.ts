@@ -16,6 +16,7 @@ export const prismaMock = {
   progress: {
     findMany: vi.fn(),
     create: vi.fn(),
+    count: vi.fn(),
   },
 };
 

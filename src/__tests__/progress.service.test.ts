@@ -8,16 +8,18 @@ describe("progress.service", () => {
   });
 
   describe("getAllProgress", () => {
-    it("should return all progress logs for a user", async () => {
+    it("should return paginated progress logs for a user", async () => {
       const mockLogs = [
-        { id: "log-1", userId: "user-id-1", weight: 75, date: new Date() },
-        { id: "log-2", userId: "user-id-1", weight: 74.5, date: new Date() },
+        { id: "log-1", userId: "user-id-1", weight: 75, notes: null, date: new Date() },
+        { id: "log-2", userId: "user-id-1", weight: 74.5, notes: null, date: new Date() },
       ];
       prismaMock.progress.findMany.mockResolvedValue(mockLogs);
+      prismaMock.progress.count.mockResolvedValue(2);
 
-      const result = await progressService.getAllProgress("user-id-1");
-      expect(result).toHaveLength(2);
-      expect(result[0].weight).toBe(75);
+      const result = await progressService.getAllProgress("user-id-1", { page: 1, limit: 20 });
+      expect(result.data).toHaveLength(2);
+      expect(result.data[0].weight).toBe(75);
+      expect(result.meta.total).toBe(2);
     });
   });
 
