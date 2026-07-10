@@ -42,10 +42,16 @@ export const exercisesRoutes = async (app: FastifyInstance) => {
       tags: ["Exercises"],
       summary: "List all exercises",
       security: [{ bearerAuth: [] }],
-      response: { 200: { type: "array", items: exerciseResponse } },
+      querystring: {
+        type: "object",
+        properties: {
+          page: { type: "integer", minimum: 1, default: 1 },
+          limit: { type: "integer", minimum: 1, maximum: 100, default: 20 },
+        },
+      },
     },
     preHandler: [authenticate],
-  }, getAllExercisesHandler);
+  }, getAllExercisesHandler as any);
 
   app.get<ExerciseParams>("/exercises/:id", {
     schema: {

@@ -37,22 +37,16 @@ export const workoutsRoutes = async (app: FastifyInstance) => {
       tags: ["Workouts"],
       summary: "List user workouts",
       security: [{ bearerAuth: [] }],
-    },
-    preHandler: [authenticate],
-  }, getAllWorkoutsHandler);
-
-  app.get<WorkoutParams>("/workouts/:id", {
-    schema: {
-      tags: ["Workouts"],
-      summary: "Get workout by id",
-      security: [{ bearerAuth: [] }],
-      params: {
+      querystring: {
         type: "object",
-        properties: { id: { type: "string" } },
+        properties: {
+          page: { type: "integer", minimum: 1, default: 1 },
+          limit: { type: "integer", minimum: 1, maximum: 100, default: 20 },
+        },
       },
     },
     preHandler: [authenticate],
-  }, getWorkoutByIdHandler);
+  }, getAllWorkoutsHandler as any);
 
   app.post("/workouts", {
     schema: {

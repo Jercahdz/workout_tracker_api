@@ -45,7 +45,10 @@ export const getAllSessionsHandler = async (
   reply: FastifyReply
 ) => {
   try {
-    const sessions = await sessionsService.getAllSessions(request.user.userId);
+    const sessions = await sessionsService.getAllSessions(
+      request.user.userId,
+      request.query as { page?: string; limit?: string }
+    );
     return reply.status(200).send(sessions);
   } catch (error) {
     return handleError(error, reply);

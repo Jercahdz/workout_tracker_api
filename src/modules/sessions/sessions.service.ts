@@ -1,20 +1,31 @@
 import { prisma } from "../../shared/utils/prisma";
+import { parsePagination, buildPaginatedResponse } from "../../shared/utils/pagination";
 import type { CreateSessionInput } from "./sessions.schema";
 
-export const getAllSessions = async (userId: string) => {
-  return prisma.session.findMany({
-    where: { userId },
-    include: {
-      workout: {
-        include: {
-          workoutExercises: {
-            include: { exercise: true },
+export const getAllSessions = async (userId: string, query: { page?: unknown; limit?: unknown }) => {
+  const params = parsePagination(query);
+  const skip = (params.page - 1) * params.limit;
+
+  const [sessions, total] = await Promise.all([
+    prisma.session.findMany({
+      where: { userId },
+      include: {
+        workout: {
+          include: {
+            workoutExercises: {
+              include: { exercise: true },
+            },
           },
         },
       },
-    },
-    orderBy: { completedAt: "desc" },
-  });
+      orderBy: { completedAt: "desc" },
+      skip,
+      take: params.limit,
+    }),
+    prisma.session.count({ where: { userId } }),
+  ]);
+
+  return buildPaginatedResponse(sessions, total, params);
 };
 
 export const getSessionById = async (id: string, userId: string) => {

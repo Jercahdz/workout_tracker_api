@@ -45,7 +45,10 @@ export const getAllWorkoutsHandler = async (
   reply: FastifyReply
 ) => {
   try {
-    const workouts = await workoutsService.getAllWorkouts(request.user.userId);
+    const workouts = await workoutsService.getAllWorkouts(
+      request.user.userId,
+      request.query as { page?: string; limit?: string }
+    );
     return reply.status(200).send(workouts);
   } catch (error) {
     return handleError(error, reply);

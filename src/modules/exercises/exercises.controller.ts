@@ -41,11 +41,11 @@ const handleError = (error: unknown, reply: FastifyReply) => {
 };
 
 export const getAllExercisesHandler = async (
-  _request: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) => {
   try {
-    const exercises = await exercisesService.getAllExercises();
+    const exercises = await exercisesService.getAllExercises(request.query as { page?: string; limit?: string });
     return reply.status(200).send(exercises);
   } catch (error) {
     return handleError(error, reply);

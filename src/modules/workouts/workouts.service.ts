@@ -1,16 +1,27 @@
 import { prisma } from "../../shared/utils/prisma";
+import { parsePagination, buildPaginatedResponse } from "../../shared/utils/pagination";
 import type { CreateWorkoutInput, UpdateWorkoutInput } from "./workouts.schema";
 
-export const getAllWorkouts = async (userId: string) => {
-  return prisma.workout.findMany({
-    where: { userId },
-    include: {
-      workoutExercises: {
-        include: { exercise: true },
+export const getAllWorkouts = async (userId: string, query: { page?: unknown; limit?: unknown }) => {
+  const params = parsePagination(query);
+  const skip = (params.page - 1) * params.limit;
+
+  const [workouts, total] = await Promise.all([
+    prisma.workout.findMany({
+      where: { userId },
+      include: {
+        workoutExercises: {
+          include: { exercise: true },
+        },
       },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+      orderBy: { createdAt: "desc" },
+      skip,
+      take: params.limit,
+    }),
+    prisma.workout.count({ where: { userId } }),
+  ]);
+
+  return buildPaginatedResponse(workouts, total, params);
 };
 
 export const getWorkoutById = async (id: string, userId: string) => {

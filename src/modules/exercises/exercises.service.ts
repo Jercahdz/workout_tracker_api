@@ -1,10 +1,21 @@
 import { prisma } from "../../shared/utils/prisma";
+import { parsePagination, buildPaginatedResponse } from "../../shared/utils/pagination";
 import type { CreateExerciseInput, UpdateExerciseInput } from "./exercises.schema";
 
-export const getAllExercises = async () => {
-  return prisma.exercise.findMany({
-    orderBy: { name: "asc" },
-  });
+export const getAllExercises = async (query: { page?: unknown; limit?: unknown }) => {
+  const params = parsePagination(query);
+  const skip = (params.page - 1) * params.limit;
+
+  const [exercises, total] = await Promise.all([
+    prisma.exercise.findMany({
+      orderBy: { name: "asc" },
+      skip,
+      take: params.limit,
+    }),
+    prisma.exercise.count(),
+  ]);
+
+  return buildPaginatedResponse(exercises, total, params);
 };
 
 export const getExerciseById = async (id: string) => {

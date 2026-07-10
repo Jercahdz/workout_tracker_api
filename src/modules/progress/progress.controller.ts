@@ -27,7 +27,10 @@ export const getAllProgressHandler = async (
   reply: FastifyReply
 ) => {
   try {
-    const progress = await progressService.getAllProgress(request.user.userId);
+    const progress = await progressService.getAllProgress(
+      request.user.userId,
+      request.query as { page?: string; limit?: string }
+    );
     return reply.status(200).send(progress);
   } catch (error) {
     return handleError(error, reply);

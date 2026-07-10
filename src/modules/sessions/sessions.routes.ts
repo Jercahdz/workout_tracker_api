@@ -16,9 +16,16 @@ export const sessionsRoutes = async (app: FastifyInstance) => {
       tags: ["Sessions"],
       summary: "List completed sessions",
       security: [{ bearerAuth: [] }],
+      querystring: {
+        type: "object",
+        properties: {
+          page: { type: "integer", minimum: 1, default: 1 },
+          limit: { type: "integer", minimum: 1, maximum: 100, default: 20 },
+        },
+      },
     },
     preHandler: [authenticate],
-  }, getAllSessionsHandler);
+  }, getAllSessionsHandler as any);
 
   app.get<SessionParams>("/sessions/:id", {
     schema: {
