@@ -1,6 +1,7 @@
 import { prisma } from "../../shared/utils/prisma";
 import { parsePagination, buildPaginatedResponse } from "../../shared/utils/pagination";
 import type { CreateWorkoutInput, UpdateWorkoutInput } from "./workouts.schema";
+import { UnitSystem } from "@prisma/client";
 
 export const getAllWorkouts = async (userId: string, query: { page?: unknown; limit?: unknown }) => {
   const params = parsePagination(query);
@@ -41,6 +42,14 @@ export const getWorkoutById = async (id: string, userId: string) => {
   return workout;
 };
 
+const getUserUnitSystem = async (userId: string): Promise<UnitSystem> => {
+  const profile = await prisma.profile.findUnique({
+    where: { userId },
+    select: { unitSystem: true },
+  });
+  return profile?.unitSystem ?? UnitSystem.METRIC;
+};
+
 export const createWorkout = async (
   userId: string,
   input: CreateWorkoutInput
@@ -55,6 +64,8 @@ export const createWorkout = async (
     }
   }
 
+  const unitSystem = await getUserUnitSystem(userId);
+
   return prisma.workout.create({
     data: {
       userId,
@@ -66,6 +77,7 @@ export const createWorkout = async (
           sets: item.sets,
           reps: item.reps,
           weight: item.weight,
+          unitSystem: item.unitSystem ?? unitSystem,
         })),
       },
     },
@@ -90,6 +102,8 @@ export const updateWorkout = async (
     throw new Error("WORKOUT_NOT_FOUND");
   }
 
+  const unitSystem = await getUserUnitSystem(userId);
+
   return prisma.workout.update({
     where: { id },
     data: {
@@ -103,6 +117,7 @@ export const updateWorkout = async (
             sets: item.sets,
             reps: item.reps,
             weight: item.weight,
+            unitSystem: item.unitSystem ?? unitSystem,
           })),
         },
       }),

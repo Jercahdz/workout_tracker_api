@@ -1,10 +1,12 @@
 import { z } from "zod";
+import { UnitSystem } from "@prisma/client";
 
 const workoutExerciseSchema = z.object({
   exerciseId: z.string().uuid(),
   sets: z.number().int().positive(),
   reps: z.number().int().positive(),
   weight: z.number().positive().optional(),
+  unitSystem: z.nativeEnum(UnitSystem).optional(),
 });
 
 export const createWorkoutSchema = z.object({

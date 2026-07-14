@@ -105,6 +105,7 @@ model WorkoutExercise {
   sets       Int
   reps       Int
   weight     Float?
+  unitSystem UnitSystem @default(METRIC)
   createdAt  DateTime @default(now())
   workout    Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
@@ -128,6 +129,7 @@ model Progress {
   id     String   @id @default(uuid())
   userId String
   weight Float
+  unitSystem UnitSystem @default(METRIC)
   notes  String?  @db.Text
   date   DateTime @default(now())
   user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
