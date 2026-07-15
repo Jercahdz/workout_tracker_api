@@ -81,7 +81,14 @@ export const authRoutes = async (app: FastifyInstance) => {
   app.post("/auth/logout", {
     schema: {
       tags: ["Auth"],
-      summary: "Logout",
+      summary: "Logout and invalidate refresh token",
+      body: {
+        type: "object",
+        required: ["refreshToken"],
+        properties: {
+          refreshToken: { type: "string" },
+        },
+      },
       response: {
         200: {
           type: "object",

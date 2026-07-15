@@ -1,7 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import { ZodError } from "zod";
 import * as authService from "./auth.service";
-import { registerSchema, loginSchema, refreshSchema } from "./auth.schema";
+import { registerSchema, loginSchema, refreshSchema, logoutSchema,} from "./auth.schema";
 
 const handleError = (error: unknown, reply: FastifyReply) => {
   if (error instanceof ZodError) {
@@ -88,8 +88,14 @@ export const refreshHandler = async (
 };
 
 export const logoutHandler = async (
-  _request: FastifyRequest,
+  request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  return reply.status(200).send({ message: "Logged out successfully" });
+  try {
+    const input = logoutSchema.parse(request.body);
+    await authService.logout(input.refreshToken);
+    return reply.status(200).send({ message: "Logged out successfully" });
+  } catch (error) {
+    return handleError(error, reply);
+  }
 };

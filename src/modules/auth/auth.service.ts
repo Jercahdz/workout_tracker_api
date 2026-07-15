@@ -58,6 +58,14 @@ export const login = async (input: LoginInput) => {
 };
 
 export const refresh = async (refreshToken: string) => {
+  const blacklisted = await prisma.blacklistedToken.findFirst({
+    where: { token: refreshToken },
+  });
+
+  if (blacklisted) {
+    throw new Error("INVALID_REFRESH_TOKEN");
+  }
+
   try {
     const payload = jwt.verify(refreshToken, env.jwtRefreshSecret) as {
       userId: string;
@@ -75,4 +83,10 @@ export const refresh = async (refreshToken: string) => {
   } catch {
     throw new Error("INVALID_REFRESH_TOKEN");
   }
+};
+
+export const logout = async (refreshToken: string) => {
+  await prisma.blacklistedToken.create({
+    data: { token: refreshToken },
+  });
 };
