@@ -43,6 +43,8 @@ Workout Tracker API allows users to:
 - Log completed workout sessions.
 - Track weight progress over time.
 - Generate a personalized weekly workout routine using a local AI model based on the user's fitness profile.
+- Track streaks, earn XP, level up and unlock achievements through a gamification system.
+- Use streak shields to protect your streak on rest days.
 
 This is a personal portfolio project built to practice production-grade backend architecture, not a commercial product.
 
@@ -95,6 +97,8 @@ src/
 │   ├── workouts/
 │   ├── sessions/
 │   ├── progress/
+│   ├── stats/
+│   ├── achievements/
 │   └── ai/
 │       └── providers/
 ├── shared/
@@ -123,7 +127,7 @@ docker-compose.yml
 
 - Node.js 22+
 - Docker Desktop
-- [Ollama](https://ollama.com) installed locally
+- [Ollama](https://ollama.com) installed locally (for local AI, optional if using Groq)
 
 ### Installation
 
@@ -152,6 +156,12 @@ docker compose up -d
 ```bash
 npx prisma migrate dev
 npx prisma generate
+```
+
+### Seed the database
+
+```bash
+npm run seed
 ```
 
 ### Pull the AI model
@@ -215,6 +225,8 @@ See `.env.example` for a complete template.
 | POST | `/profile` | Create fitness profile | Bearer |
 | PUT | `/profile` | Update fitness profile | Bearer |
 
+In the profile you can configure `trainingDays` (e.g. `["MON", "WED", "FRI"]`) to define your weekly training schedule. Streaks are only broken if you miss a configured training day. Valid values: `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `SUN`.
+
 ### Exercises
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
@@ -256,6 +268,17 @@ See `.env.example` for a complete template.
 |---|---|---|---|
 | GET | `/health` | Health check | Public |
 
+### Stats
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/stats` | Get user stats, streak and level | Bearer |
+| POST | `/stats/use-shield` | Use a shield to protect streak | Bearer |
+
+### Achievements
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| GET | `/achievements` | Get all achievements and user progress | Bearer |
+
 ---
 
 ## Testing
@@ -285,6 +308,7 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ## Roadmap
 
+- [x] Gamification system with streaks, XP, levels, shields and achievements
 - [x] Refresh token blacklist for real logout invalidation
 - [x] Full imperial unit system support (lb / in) across all weight and height fields
 - [x] Pagination and filtering for list endpoints
