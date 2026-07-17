@@ -3,6 +3,7 @@ import { OllamaProvider } from "./providers/ollama.provider";
 import { GroqProvider } from "./providers/groq.provider";
 import type { AIProvider } from "./providers/ai-provider.interface";
 import { env } from "../../config/env";
+import { processAiRoutineStats } from "../stats/stats.service";
 
 const getProvider = (): AIProvider => {
   if (env.aiProvider === "groq") {
@@ -49,6 +50,8 @@ export const generateRoutine = async (userId: string): Promise<string> => {
 
   const prompt = buildPrompt(profile);
   const provider = getProvider();
+
+  await processAiRoutineStats(userId);
 
   return provider.generateRoutine(prompt);
 };

@@ -1,6 +1,7 @@
 import { prisma } from "../../shared/utils/prisma";
 import { parsePagination, buildPaginatedResponse } from "../../shared/utils/pagination";
 import type { CreateSessionInput } from "./sessions.schema";
+import { processSessionStats } from "../stats/stats.service";
 
 export const getAllSessions = async (userId: string, query: { page?: unknown; limit?: unknown }) => {
   const params = parsePagination(query);
@@ -61,7 +62,7 @@ export const createSession = async (
     throw new Error("WORKOUT_NOT_FOUND");
   }
 
-  return prisma.session.create({
+  const session = await prisma.session.create({
     data: {
       userId,
       workoutId: input.workoutId,
@@ -78,4 +79,8 @@ export const createSession = async (
       },
     },
   });
+
+  await processSessionStats(userId);
+
+  return session;
 };
