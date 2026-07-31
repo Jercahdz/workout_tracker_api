@@ -47,7 +47,7 @@ const exercises = [
   { name: "Lateral Raise", muscleGroup: "SHOULDERS", equipment: "Dumbbells", description: "Isolation exercise for the lateral deltoid." },
   { name: "Front Raise", muscleGroup: "SHOULDERS", equipment: "Dumbbells", description: "Isolation exercise for the anterior deltoid." },
   { name: "Rear Delt Fly", muscleGroup: "SHOULDERS", equipment: "Dumbbells", description: "Isolation exercise for the posterior deltoid." },
-  { name: "Face Pull", muscleGroup: "SHOULDERS", equipment: "Cable Machine", description: "Cable exercise for rear delts and rotator cuff." },
+  { name: "Cable Face Pull", muscleGroup: "SHOULDERS", equipment: "Cable Machine", description: "Cable exercise for rear delts and rotator cuff." },
   { name: "Arnold Press", muscleGroup: "SHOULDERS", equipment: "Dumbbells", description: "Rotating dumbbell press for full shoulder development." },
   { name: "Upright Row", muscleGroup: "SHOULDERS", equipment: "Barbell", description: "Vertical pulling movement for traps and lateral deltoids." },
   { name: "Cable Lateral Raise", muscleGroup: "SHOULDERS", equipment: "Cable Machine", description: "Cable variation of lateral raise for constant tension." },
