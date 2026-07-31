@@ -18,7 +18,7 @@ export const createWorkoutSchema = z.object({
 export const updateWorkoutSchema = z.object({
   name: z.string().min(2).max(100).optional(),
   scheduledAt: z.string().datetime().optional(),
-  exercises: z.array(workoutExerciseSchema).min(1).optional(),
+  exercises: z.array(workoutExerciseSchema).min(0).optional(),
 });
 
 export type CreateWorkoutInput = z.infer<typeof createWorkoutSchema>;
