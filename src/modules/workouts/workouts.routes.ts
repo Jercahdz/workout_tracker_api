@@ -48,6 +48,19 @@ export const workoutsRoutes = async (app: FastifyInstance) => {
     preHandler: [authenticate],
   }, getAllWorkoutsHandler as any);
 
+  app.get<WorkoutParams>("/workouts/:id", {
+    schema: {
+      tags: ["Workouts"],
+      summary: "Get workout by id",
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: "object",
+        properties: { id: { type: "string" } },
+      },
+    },
+    preHandler: [authenticate],
+  }, getWorkoutByIdHandler);
+
   app.post("/workouts", {
     schema: {
       tags: ["Workouts"],
