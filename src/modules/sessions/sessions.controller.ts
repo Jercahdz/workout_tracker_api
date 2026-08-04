@@ -70,6 +70,21 @@ export const getSessionByIdHandler = async (
   }
 };
 
+export const getSessionsByWorkoutHandler = async (
+  request: FastifyRequest<{ Params: { workoutId: string } }>,
+  reply: FastifyReply
+) => {
+  try {
+    const sessions = await sessionsService.getSessionsByWorkout(
+      request.user.userId,
+      request.params.workoutId
+    );
+    return reply.status(200).send(sessions);
+  } catch (error) {
+    return handleError(error, reply);
+  }
+};
+
 export const createSessionHandler = async (
   request: FastifyRequest,
   reply: FastifyReply

@@ -50,6 +50,19 @@ export const getSessionById = async (id: string, userId: string) => {
   return session;
 };
 
+export const getSessionsByWorkout = async (userId: string, workoutId: string) => {
+  return prisma.session.findMany({
+    where: { userId, workoutId },
+    orderBy: { completedAt: "desc" },
+    take: 5,
+    select: {
+      id: true,
+      completedAt: true,
+      notes: true,
+    },
+  });
+};
+
 export const createSession = async (
   userId: string,
   input: CreateSessionInput

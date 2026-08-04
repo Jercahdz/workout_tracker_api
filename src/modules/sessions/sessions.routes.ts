@@ -4,10 +4,15 @@ import {
   getAllSessionsHandler,
   getSessionByIdHandler,
   createSessionHandler,
+  getSessionsByWorkoutHandler,
 } from "./sessions.controller";
 
 interface SessionParams extends RouteGenericInterface {
   Params: { id: string };
+}
+
+interface WorkoutSessionParams extends RouteGenericInterface {
+  Params: { workoutId: string };
 }
 
 export const sessionsRoutes = async (app: FastifyInstance) => {
@@ -57,4 +62,17 @@ export const sessionsRoutes = async (app: FastifyInstance) => {
     },
     preHandler: [authenticate],
   }, createSessionHandler);
+  
+  app.get<WorkoutSessionParams>("/sessions/workout/:workoutId", {
+    schema: {
+      tags: ["Sessions"],
+      summary: "Get sessions by workout",
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: "object",
+        properties: { workoutId: { type: "string" } },
+      },
+    },
+    preHandler: [authenticate],
+  }, getSessionsByWorkoutHandler);
 };
