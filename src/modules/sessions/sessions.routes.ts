@@ -32,6 +32,19 @@ export const sessionsRoutes = async (app: FastifyInstance) => {
     preHandler: [authenticate],
   }, getAllSessionsHandler as any);
 
+  app.get<WorkoutSessionParams>("/sessions/workout/:workoutId", {
+    schema: {
+      tags: ["Sessions"],
+      summary: "Get sessions by workout",
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: "object",
+        properties: { workoutId: { type: "string" } },
+      },
+    },
+    preHandler: [authenticate],
+  }, getSessionsByWorkoutHandler);
+
   app.get<SessionParams>("/sessions/:id", {
     schema: {
       tags: ["Sessions"],
@@ -62,17 +75,4 @@ export const sessionsRoutes = async (app: FastifyInstance) => {
     },
     preHandler: [authenticate],
   }, createSessionHandler);
-  
-  app.get<WorkoutSessionParams>("/sessions/workout/:workoutId", {
-    schema: {
-      tags: ["Sessions"],
-      summary: "Get sessions by workout",
-      security: [{ bearerAuth: [] }],
-      params: {
-        type: "object",
-        properties: { workoutId: { type: "string" } },
-      },
-    },
-    preHandler: [authenticate],
-  }, getSessionsByWorkoutHandler);
 };
