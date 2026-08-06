@@ -37,6 +37,21 @@ export const getAllProgressHandler = async (
   }
 };
 
+export const getExerciseProgressHandler = async (
+  request: FastifyRequest<{ Params: { exerciseId: string } }>,
+  reply: FastifyReply
+) => {
+  try {
+    const progress = await progressService.getExerciseProgress(
+      request.user.userId,
+      request.params.exerciseId
+    );
+    return reply.status(200).send(progress);
+  } catch (error) {
+    return handleError(error, reply);
+  }
+};
+
 export const logProgressHandler = async (
   request: FastifyRequest,
   reply: FastifyReply

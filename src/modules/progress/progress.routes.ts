@@ -1,6 +1,10 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, RouteGenericInterface } from "fastify";
 import { authenticate } from "../../shared/middlewares/authenticate";
-import { getAllProgressHandler, logProgressHandler } from "./progress.controller";
+import { getAllProgressHandler, logProgressHandler, getExerciseProgressHandler } from "./progress.controller";
+
+interface ExerciseProgressParams extends RouteGenericInterface {
+  Params: { exerciseId: string };
+}
 
 export const progressRoutes = async (app: FastifyInstance) => {
   app.get("/progress", {
@@ -18,7 +22,7 @@ export const progressRoutes = async (app: FastifyInstance) => {
     },
     preHandler: [authenticate],
   }, getAllProgressHandler as any);
-  
+
   app.post("/progress/log", {
     schema: {
       tags: ["Progress"],
@@ -36,4 +40,17 @@ export const progressRoutes = async (app: FastifyInstance) => {
     },
     preHandler: [authenticate],
   }, logProgressHandler);
+
+  app.get<ExerciseProgressParams>("/progress/exercise/:exerciseId", {
+    schema: {
+      tags: ["Progress"],
+      summary: "Get weight progress for a specific exercise",
+      security: [{ bearerAuth: [] }],
+      params: {
+        type: "object",
+        properties: { exerciseId: { type: "string" } },
+      },
+    },
+    preHandler: [authenticate],
+  }, getExerciseProgressHandler);
 };
