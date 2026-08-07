@@ -31,12 +31,28 @@ const buildPrompt = (profile: {
 - Fitness goal: ${profile.goal.replace(/_/g, " ").toLowerCase()}
 - Fitness level: ${profile.level.toLowerCase()}
 
-Provide a structured 5-day workout plan. For each day include:
-1. Muscle groups targeted
-2. List of exercises with sets, reps, and rest time
-3. Estimated duration
+Respond ONLY with a valid JSON object, no markdown, no extra text. Use this exact structure:
+{
+  "summary": "Brief description of the routine",
+  "days": [
+    {
+      "name": "Day name (e.g. Push Day, Leg Day)",
+      "muscleGroups": ["CHEST", "TRICEPS"],
+      "exercises": [
+        {
+          "name": "Exercise name",
+          "sets": 3,
+          "reps": 10,
+          "restSeconds": 60,
+          "notes": "Optional tip"
+        }
+      ],
+      "estimatedDuration": 45
+    }
+  ]
+}
 
-Keep the response clear and practical. Respond in the same language the user is likely to use.`;
+Generate exactly 5 days. Use common exercise names. Sets and reps should be numbers.`;
 };
 
 export const generateRoutine = async (userId: string): Promise<string> => {
