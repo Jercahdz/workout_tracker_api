@@ -15,6 +15,8 @@ export class GroqProvider implements AIProvider {
     const completion = await this.client.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
       model: this.model,
+      max_tokens: 4000,
+      temperature: 0.7,
     });
 
     const content = completion.choices[0]?.message?.content;
